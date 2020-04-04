@@ -3,10 +3,12 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cryptoRoutes = require('./routes/crypto');
+const cors = require('cors');
 
 //Globals
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 //Issues when using Postman so trying url encoded
