@@ -50,7 +50,9 @@ const publicClient = new CoinbasePro.PublicClient();
 //Sort time DSC - DEFAULT
 router.get('/sortByTimeDesc', async (req, res, next) => {
   try {
-    const result = await db.query('SELECT * FROM BTC_historic_rates DESC');
+    const result = await db.query(
+      'SELECT * FROM BTC_historic_rates by time DESC'
+    );
 
     return res.json({ data: result.rows });
   } catch (e) {
