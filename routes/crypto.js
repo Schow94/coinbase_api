@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+
+var schedule = require('node-schedule');
+
 // const fastcsv = require('fast-csv');
 // const fs = require('fs');
 // const ws = fs.createWriteStream(
@@ -45,7 +48,60 @@ const publicClient = new CoinbasePro.PublicClient();
 //   }
 // });
 
-//Add code to Get todays high/low in automated fashion while deployed
+//Automate API calls to once a day
+// var j = schedule.scheduleJob('0 5 * * *', () => {
+//   console.log('Updating the dB for today', new Date());
+//   //Seed dB once a day with new data for today
+//   router.get('/getToday', async (req, res, next) => {
+//     try {
+//       console.log('Making API call now');
+//       //Make API call here
+//       const products = await publicClient.getProductHistoricRates('BTC-USD', {
+//         granularity: 86400,
+//       });
+
+//       //Latest it has is yesterdays data
+//       var arr = products[0];
+//       //Update dB once a day, 5AM P?
+//       // const data = await db.query(
+//       //   'INSERT INTO BTC_historic_rates (time, low, high, open, close, volume) VALUES ($1, $2, $3, $4, $5, $6)',
+//       //   [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]
+//       // );
+
+//       // API returns 300 days
+//       return res.json({
+//         result: data,
+//       });
+//     } catch (e) {
+//       return next(e);
+//     }
+//   });
+// });
+
+router.get('/getToday', async (req, res, next) => {
+  try {
+    console.log('Making API call now');
+    //Make API call here
+    const products = await publicClient.getProductHistoricRates('BTC-USD', {
+      granularity: 86400,
+    });
+
+    //Latest it has is yesterdays data
+    var arr = products[0];
+    //Update dB once a day, 5AM P?
+    const data = await db.query(
+      'INSERT INTO BTC_historic_rates (time, low, high, open, close, volume) VALUES ($1, $2, $3, $4, $5, $6)',
+      [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]
+    );
+
+    // API returns 300 days
+    return res.json({
+      result: data.result.rows[0],
+    });
+  } catch (e) {
+    return next(e);
+  }
+});
 
 //Sort time DSC - DEFAULT
 router.get('/sortByTimeDesc', async (req, res, next) => {
