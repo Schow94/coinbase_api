@@ -45,6 +45,8 @@ const publicClient = new CoinbasePro.PublicClient();
 //   }
 // });
 
+//Add code to Get todays high/low in automated fashion while deployed
+
 //Sort time DSC - DEFAULT
 router.get('/sortByTimeDesc', async (req, res, next) => {
   try {
@@ -199,40 +201,40 @@ router.get('/sortByVolumeAsc', async (req, res, next) => {
   }
 });
 
-//Download CSV from dB
-router.get('/download', async (req, res, next) => {
-  try {
-    client.connect((err, client, done) => {
-      // error handling for the client instance connection
-      if (err) throw err;
-      // SQL string that selects all records from a table
-      const sqlQuery = `SELECT * FROM BTC_historic_rates`;
-      client.query(sqlQuery, (err, res) => {
-        if (err) {
-          console.log('client.query()', err.stack);
-        }
-        if (res) {
-          const jsonData = JSON.parse(JSON.stringify(res.rows));
-          //Gets to here and then stops
-          console.log('\njsonData:', jsonData);
-          // write the JSON data as a CSV file
-          // log message when finished
-          fastcsv
-            .write(jsonData, { headers: true })
-            .on('finish', function () {
-              console.log(
-                `Postgres table BTC_historic_rates exported to CSV file successfully.`
-              );
-            })
-            .pipe(ws);
-        }
-        //Script not closing/ending when done
-        done(console.log('Creating CSV from client.query() data'));
-      });
-    });
-  } catch (e) {
-    return next(e);
-  }
-});
+//Download CSV from dB - Wont work in browser. Only works locally
+// router.get('/download', async (req, res, next) => {
+//   try {
+//     client.connect((err, client, done) => {
+//       // error handling for the client instance connection
+//       if (err) throw err;
+//       // SQL string that selects all records from a table
+//       const sqlQuery = `SELECT * FROM BTC_historic_rates`;
+//       client.query(sqlQuery, (err, res) => {
+//         if (err) {
+//           console.log('client.query()', err.stack);
+//         }
+//         if (res) {
+//           const jsonData = JSON.parse(JSON.stringify(res.rows));
+//           //Gets to here and then stops
+//           console.log('\njsonData:', jsonData);
+//           // write the JSON data as a CSV file
+//           // log message when finished
+//           fastcsv
+//             .write(jsonData, { headers: true })
+//             .on('finish', function () {
+//               console.log(
+//                 `Postgres table BTC_historic_rates exported to CSV file successfully.`
+//               );
+//             })
+//             .pipe(ws);
+//         }
+//         //Script not closing/ending when done
+//         done(console.log('Creating CSV from client.query() data'));
+//       });
+//     });
+//   } catch (e) {
+//     return next(e);
+//   }
+// });
 
 module.exports = router;
