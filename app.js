@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const BTCRoutes = require('./routes/bitcoin');
 const ETHRoutes = require('./routes/ethereum');
+const LTCRoutes = require('./routes/litecoin');
 
 //Globals
 const PORT = process.env.PORT || 5000;
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 
 app.use('/crypto/bitcoin', BTCRoutes);
 app.use('/crypto/ethereum', ETHRoutes);
+app.use('/crypto/litecoin', LTCRoutes);
 
 app.use((req, res, next) => {
   var err = new Error('Not found');
