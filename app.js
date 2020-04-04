@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const cryptoRoutes = require('./routes/crypto');
+// const cryptoRoutes = require('./routes/crypto');
 const cors = require('cors');
+
+const BTCRoutes = require('./routes/bitcoin');
+const ETHRoutes = require('./routes/ethereum');
 
 //Globals
 const PORT = process.env.PORT || 5000;
@@ -14,7 +17,8 @@ app.use(bodyParser.json());
 //Issues when using Postman so trying url encoded
 // app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/crypto', cryptoRoutes);
+app.use('/crypto/bitcoin', BTCRoutes);
+app.use('/crypto/ethereum', ETHRoutes);
 
 app.use((req, res, next) => {
   var err = new Error('Not found');
