@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const fastcsv = require('fast-csv');
-const fs = require('fs');
-const ws = fs.createWriteStream(
-  //Not sure how this would work for downloading from online
-  '/Users/stephenchow/Downloads/test_coinbase-data_1.csv'
-);
+// const fastcsv = require('fast-csv');
+// const fs = require('fs');
+// const ws = fs.createWriteStream(
+//   //Not sure how this would work for downloading from online
+//   '/Users/stephenchow/Downloads/test_coinbase-data_1.csv'
+// );
 
 //For downloading CSV
-const Pool = require('pg').Pool;
-const client = new Pool({
-  host: 'localhost',
-  user: 'stephenchow',
-  database: 'BTC_historic_rates',
-  port: process.env.PORT,
-});
-const tableName = 'BTC_historical_rates';
+// const Pool = require('pg').Pool;
+// const client = new Pool({
+//   host: 'localhost',
+//   user: 'stephenchow',
+//   database: 'BTC_historic_rates',
+//   port: process.env.PORT,
+// });
+// const tableName = 'BTC_historical_rates';
 
 //Coinbase PRO - Public API
 const CoinbasePro = require('coinbase-pro');
